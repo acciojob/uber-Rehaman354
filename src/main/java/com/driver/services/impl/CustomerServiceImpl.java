@@ -1,16 +1,13 @@
 package com.driver.services.impl;
 
-import com.driver.model.TripBooking;
+import com.driver.model.*;
 import com.driver.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.driver.model.Customer;
-import com.driver.model.Driver;
 import com.driver.repository.CustomerRepository;
 import com.driver.repository.DriverRepository;
 import com.driver.repository.TripBookingRepository;
-import com.driver.model.TripStatus;
 
 import java.util.Optional;
 
@@ -45,14 +42,15 @@ public class CustomerServiceImpl implements CustomerService {
 		int drivercount=driverRepository2.findAll().size();
        for(int i=1;i<=drivercount;i++)
 	   {
-		   if(driverRepository2.findById(i).get().getCab().getAvailable())
+		   Driver driver=driverRepository2.findById(i).get();
+
+		   if(driver!=null&&driverRepository2.findById(i).get().getCab().getAvailable())
 		   {
 			   TripBooking trip=new TripBooking();
 			   Customer customer=customerRepository2.findById(customerId).get();
 			   trip.setCustomer(customer);
 			   trip.setStatus(TripStatus.CONFIRMED);
 			   trip.setDistanceInKm(distanceInKm);
-			   Driver driver=driverRepository2.findById(i).get();
 			   trip.setDriver(driver);
 			   trip.setFromLocation(fromLocation);
 			   trip.setToLocation(toLocation);
@@ -75,6 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
         TripBooking trip=tripBookingRepository2.findById(tripId).get();
 		trip.getDriver().getCab().setAvailable(true);
 		trip.setStatus(TripStatus.CANCELED);
+		trip.setBill(0);
 		tripBookingRepository2.save(trip);
 
 	}
