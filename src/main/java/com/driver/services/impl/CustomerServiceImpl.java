@@ -45,12 +45,12 @@ public class CustomerServiceImpl implements CustomerService {
 		int drivercount=driverRepository2.findAll().size();
        for(int i=1;i<=drivercount;i++)
 	   {
-		   if(driverRepository2.findById(i).get().getCab().isAvailable())
+		   if(driverRepository2.findById(i).get().getCab().getAvailable())
 		   {
 			   TripBooking trip=new TripBooking();
 			   Customer customer=customerRepository2.findById(customerId).get();
 			   trip.setCustomer(customer);
-			   trip.setTripStatus(TripStatus.CONFIRMED);
+			   trip.setStatus(TripStatus.CONFIRMED);
 			   trip.setDistanceInKm(distanceInKm);
 			   Driver driver=driverRepository2.findById(i).get();
 			   trip.setDriver(driver);
@@ -74,7 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
 		//Cancel the trip having given trip Id and update TripBooking attributes accordingly
         TripBooking trip=tripBookingRepository2.findById(tripId).get();
 		trip.getDriver().getCab().setAvailable(true);
-		trip.setTripStatus(TripStatus.CANCELED);
+		trip.setStatus(TripStatus.CANCELED);
 		tripBookingRepository2.save(trip);
 
 	}
@@ -84,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 		TripBooking trip=tripBookingRepository2.findById(tripId).get();
 		trip.getDriver().getCab().setAvailable(true);
-		trip.setTripStatus(TripStatus.COMPLETED);
+		trip.setStatus(TripStatus.COMPLETED);
 		tripBookingRepository2.save(trip);
 	}
 }

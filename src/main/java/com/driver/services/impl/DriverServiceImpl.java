@@ -26,7 +26,7 @@ public class DriverServiceImpl implements DriverService {
 		driver.setPassword(password);
 		//create cab for driver
 		Cab cab=new Cab();
-		cab.setPerKmrate(10);
+		cab.setPerKmRate(10);
 		cab.setAvailable(true);
 		driver.setCab(cab);
        driverRepository3.save(driver);//it will automatically save cab too
