@@ -9,6 +9,7 @@ import com.driver.repository.CustomerRepository;
 import com.driver.repository.DriverRepository;
 import com.driver.repository.TripBookingRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,7 +33,17 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public void deleteCustomer(Integer customerId) {
 		// Delete customer without using deleteById function
-         customerRepository2.deleteById(customerId);
+		Customer customer = customerRepository2.findById(customerId).get();
+		List<TripBooking> bookedTrips = customer.getTripBookingList();
+
+		for(TripBooking trip : bookedTrips){
+			Driver driver = trip.getDriver();
+			Cab cab = driver.getCab();
+			cab.setAvailable(true);
+			driverRepository2.save(driver);
+			trip.setStatus(TripStatus.CANCELED);
+		}
+		customerRepository2.delete(customer);
 	}
 
 	@Override
